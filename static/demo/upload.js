@@ -27,10 +27,11 @@ function send_request()
     if (xmlhttp!=null)
     {
         // serverUrl是 用户获取 '签名和Policy' 等信息的应用服务器的URL，请将下面的IP和Port配置为您自己的真实信息。
-        serverUrl = 'http://127.0.0.1:9502'
+        serverUrl = 'http://127.0.0.1:9501'
 		
         xmlhttp.open( "GET", serverUrl + "/v1/token", false );
         xmlhttp.send( null );
+        console.log(xmlhttp.responseText,'xmlhttp.responseText')
         return xmlhttp.responseText
     }
     else
@@ -61,7 +62,7 @@ function get_signature()
         var obj = eval ("(" + body + ")");
         host = obj['host']
         policyBase64 = obj['policy']
-        accessid = obj['accessid']
+        accessid = obj['accessId']
         signature = obj['signature']
         expire = parseInt(obj['expire'])
         callbackbody = obj['callback'] 
@@ -132,11 +133,12 @@ function set_upload_param(up, filename, ret)
     new_multipart_params = {
         'key' : g_object_name,
         'policy': policyBase64,
-        'OSSAccessKeyId': accessid, 
+        'OSSAccessKeyId': accessid,
         'success_action_status' : '200', //让服务端返回200,不然，默认会返回204
         'callback' : callbackbody,
         'signature': signature,
     };
+    console.log(accessid,'accessidaccessidaccessidaccessid')
 
     up.setOption({
         'url': host,
