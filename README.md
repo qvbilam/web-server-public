@@ -21,11 +21,29 @@ docker build -t qvbilam/oss-web-server-alpine:0.0.1 .
 # 启动容器
 docker container run -d -p 9501:9501 qvbilam/oss-web-server-alpine:0.0.1
 
-# 上传镜像 -p 容器ID
-docker commit -a "qvbilam" -m "go oss web server 0.0.1" -p 973b6fb8001694 qvbilam/oss-web-server-alpine:0.0.1
+# 登陆阿里云
+docker login --username=13501294164 registry.cn-hangzhou.aliyuncs.com
 
-docker tag qvbilam/oss-web-server-alpine:0.0.1 docker.qvbilam.xin:8081/qvbilam/oss-web-server-alpine:0.0.1
+# 镜像ID
+docker tag 7f04d53f1c02 registry.cn-hangzhou.aliyuncs.com/qvbilam/oss-web:0.0.1
+docker push registry.cn-hangzhou.aliyuncs.com/qvbilam/oss-web:0.0.1
+```
 
-# 推送镜像
-docker push docker.qvbilam.xin:8081/qvbilam/oss-web-server-alpine:0.0.1
+## 启动
+```shell
+# 创建访问令牌
+kubectl create secret docker-registry ali-image-key --docker-server=registry.cn-hangzhou.aliyuncs.com --docker-username=13501294164 --docker-password=kenan123456789
+
+# 启动服务
+kubectl apply -f oss.deployment.yaml
+kubectl apply -f oss.server.yaml
+
+# 查看pods
+kubectl get pods
+
+# 查看服务
+kubectl get svc
+
+# 开放端口
+kubectl port-forward service/oss-web-server 9501:9501 -n default
 ```

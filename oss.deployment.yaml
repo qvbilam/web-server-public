@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: oss-web-server
+  labels:
+    app: oss-web-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: oss-web-server
+  template:
+    metadata:
+      labels:
+        app: oss-web-server
+    spec:
+      containers:
+        - name: oss-web-server
+          image: registry.cn-hangzhou.aliyuncs.com/qvbilam/oss-web:0.0.1
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8000
+          resources:
+            limits:
+              cpu: 100m
+              memory: 128Mi
+      imagePullSecrets:
+        - name: ali-image-key

@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: oss-web-server
+spec:
+  selector:
+    app: oss-web-server
+  ports:
+    - protocol: TCP
+      port: 9501
+  type: NodePort
