@@ -16,6 +16,14 @@ func InitRouters() *gin.Engine {
 			"msg": "pong",
 		})
 	})
+
+	router.GET("/", func(context *gin.Context) {
+		context.JSON(http.StatusOK, gin.H{
+			"msg":     "hello",
+			"version": "0.0.1",
+		})
+	})
+
 	// demo
 	router.LoadHTMLFiles(fmt.Sprintf("static/demo/index.html"))
 	// 配置静态文件夹路径 第一个参数是api，第二个是文件夹路径
