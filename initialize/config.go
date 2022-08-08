@@ -15,14 +15,14 @@ func InitConfig() {
 
 func InitEnvConfig() {
 	global.ServerConfig.Name = *flag.String("name", "default-oss-web-server", "server name")
-	global.ServerConfig.Host = *flag.String("name", "0.0.0.0", "server host")
-	global.ServerConfig.Port = *flag.Int64("name", 9501, "server port")
-	global.ServerConfig.OssConfig.Key = *flag.String("name", "", "oss key")
-	global.ServerConfig.OssConfig.Secrect = *flag.String("name", "", "oss secret")
-	global.ServerConfig.OssConfig.Host = *flag.String("name", "", "oss host")
-	global.ServerConfig.OssConfig.CallbackUrl = *flag.String("name", "", "oss callback")
-	global.ServerConfig.OssConfig.UploadDir = *flag.String("name", "", "oss upload dir")
-	global.ServerConfig.OssConfig.ExpireTime = *flag.Int64("name", 300, "oss expire time")
+	global.ServerConfig.Host = *flag.String("host", "0.0.0.0", "server host")
+	global.ServerConfig.Port = *flag.Int64("port", 9501, "server port")
+	global.ServerConfig.OssConfig.Key = *flag.String("oss_key", "", "oss key")
+	global.ServerConfig.OssConfig.Secrect = *flag.String("oss_secrect", "", "oss secret")
+	global.ServerConfig.OssConfig.Host = *flag.String("oss_host", "", "oss host")
+	global.ServerConfig.OssConfig.CallbackUrl = *flag.String("oss_callback_url", "", "oss callback")
+	global.ServerConfig.OssConfig.UploadDir = *flag.String("oss_upload_dir", "", "oss upload dir")
+	global.ServerConfig.OssConfig.ExpireTime = *flag.Int64("oss_expire_time", 300, "oss expire time")
 }
 
 func initViperConfig() {

@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: oss-web-server
-          image: registry.cn-hangzhou.aliyuncs.com/qvbilam/oss-web:0.0.2
+          image: registry.cn-hangzhou.aliyuncs.com/qvbilam/oss-web:0.0.3
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8000
