@@ -6,6 +6,7 @@ import (
 	"github.com/spf13/viper"
 	"go.uber.org/zap"
 	"oss/global"
+	"strconv"
 )
 
 func InitConfig() {
@@ -14,15 +15,20 @@ func InitConfig() {
 }
 
 func InitEnvConfig() {
+	portString := *flag.String("port", "9501", "server port")
+	port, _ := strconv.Atoi(portString)
+	ossExpireTimeString := *flag.String("oss_expire_time", "300", "oss expire time")
+	ossExpireTime, _ := strconv.Atoi(ossExpireTimeString)
+
 	global.ServerConfig.Name = *flag.String("name", "default-oss-web-server", "server name")
-	global.ServerConfig.Host = *flag.String("host", "0.0.0.0", "server host")
-	global.ServerConfig.Port = *flag.Int64("port", 9501, "server port")
+	//global.ServerConfig.Host = *flag.String("host", "0.0.0.0", "server host")
+	global.ServerConfig.Port = int64(port)
 	global.ServerConfig.OssConfig.Key = *flag.String("oss_key", "", "oss key")
 	global.ServerConfig.OssConfig.Secrect = *flag.String("oss_secrect", "", "oss secret")
 	global.ServerConfig.OssConfig.Host = *flag.String("oss_host", "", "oss host")
 	global.ServerConfig.OssConfig.CallbackUrl = *flag.String("oss_callback_url", "", "oss callback")
 	global.ServerConfig.OssConfig.UploadDir = *flag.String("oss_upload_dir", "", "oss upload dir")
-	global.ServerConfig.OssConfig.ExpireTime = *flag.Int64("oss_expire_time", 300, "oss expire time")
+	global.ServerConfig.OssConfig.ExpireTime = int64(ossExpireTime)
 }
 
 func initViperConfig() {

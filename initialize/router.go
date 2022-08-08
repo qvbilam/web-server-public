@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"oss/global"
 	"oss/middleware"
 	ossRouter "oss/router"
 )
@@ -19,8 +20,9 @@ func InitRouters() *gin.Engine {
 
 	router.GET("/", func(context *gin.Context) {
 		context.JSON(http.StatusOK, gin.H{
-			"msg":     "hello",
-			"version": "0.0.2",
+			"name":    global.ServerConfig.Name,
+			"tags":    global.ServerConfig.Tags,
+			"version": "1.0",
 		})
 	})
 

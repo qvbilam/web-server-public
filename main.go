@@ -16,15 +16,11 @@ func main() {
 	Router := initialize.InitRouters()
 
 	Name := global.ServerConfig.Name
-	Host := global.ServerConfig.Host
 	Port := global.ServerConfig.Port
-	//Name := "test"
-	//Host := "0.0.0.0"
-	//Port := 9501
 
 	// 启动服务
 	go func() {
-		zap.S().Infof("%s server start listen: %s:%d", Name, Host, Port)
+		zap.S().Infof("%s server start listen: %s:%d", Name, "0.0.0.0", Port)
 		if err := Router.Run(fmt.Sprintf(":%d", Port)); err != nil {
 			zap.S().Panicf("%s server start error: %s", Name, err.Error())
 		}

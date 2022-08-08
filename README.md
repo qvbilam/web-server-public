@@ -35,6 +35,9 @@ docker push registry.cn-hangzhou.aliyuncs.com/qvbilam/oss-web:[TAG]
 # 创建访问令牌
 kubectl create secret docker-registry ali-image-key --docker-server=registry.cn-hangzhou.aliyuncs.com --docker-username=13501294164 --docker-password=kenan123456789
 
+# 申请配置
+kubectl apply -f oss.config.yaml
+
 # 启动服务
 kubectl apply -f oss.deployment.yaml
 kubectl apply -f oss.server.yaml
