@@ -6,6 +6,8 @@ metadata:
     app: oss-web-server
 spec:
   replicas: 1
+  strategy:
+    type: RollingUpdate
   selector:
     matchLabels:
       app: oss-web-server
@@ -16,7 +18,7 @@ spec:
     spec:
       containers:
         - name: oss-web-server
-          image: registry.cn-hangzhou.aliyuncs.com/qvbilam/oss-web:0.0.1
+          image: registry.cn-hangzhou.aliyuncs.com/qvbilam/oss-web:0.0.2
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8000

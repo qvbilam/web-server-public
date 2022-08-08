@@ -20,7 +20,7 @@ func InitRouters() *gin.Engine {
 	router.GET("/", func(context *gin.Context) {
 		context.JSON(http.StatusOK, gin.H{
 			"msg":     "hello",
-			"version": "0.0.1",
+			"version": "0.0.2",
 		})
 	})
 

@@ -9,24 +9,25 @@ go get -u github.com/aliyun/aliyun-oss-go-sdk/oss
 # 日志
 go get -u go.uber.org/zap
 
-# 配置
-go get -u github.com/spf13/viper
+# 配置(后者用来读取系统参数
+# go get -u github.com/spf13/viper
+go get -u github.com/namsral/flag
 ```
 
 ## 部署
 ```shell
 # 构建镜像
-docker build -t qvbilam/oss-web-server-alpine:0.0.1 .
+docker build -t qvbilam/oss-web-server-alpine:[TAG] .
 
 # 启动容器
-docker container run -d -p 9501:9501 qvbilam/oss-web-server-alpine:0.0.1
+docker container run -d -p 9501:9501 qvbilam/oss-web-server-alpine:[TAG]
 
 # 登陆阿里云
 docker login --username=13501294164 registry.cn-hangzhou.aliyuncs.com
 
 # 镜像ID
-docker tag 7f04d53f1c02 registry.cn-hangzhou.aliyuncs.com/qvbilam/oss-web:0.0.1
-docker push registry.cn-hangzhou.aliyuncs.com/qvbilam/oss-web:0.0.1
+docker tag [IMAGE ID] registry.cn-hangzhou.aliyuncs.com/qvbilam/oss-web:[TAG]
+docker push registry.cn-hangzhou.aliyuncs.com/qvbilam/oss-web:[TAG]
 ```
 
 ## 启动
