@@ -21,12 +21,42 @@ spec:
           image: registry.cn-hangzhou.aliyuncs.com/qvbilam/oss-web:1.0
           imagePullPolicy: IfNotPresent
           ports:
-            - containerPort: 8000
+            - containerPort: 9501
           env:
-            - name: NAME
+            - name: SERVER_NAME
               valueFrom:
                 configMapKeyRef:
-                  key: name
+                  key: server_name
+                  name: oss
+            - name: OSS_KEY
+              valueFrom:
+                configMapKeyRef:
+                  key: oss_key
+                  name: oss
+            - name: OSS_SECRET
+              valueFrom:
+                configMapKeyRef:
+                  key: oss_secrect
+                  name: oss
+            - name: OSS_HOST
+              valueFrom:
+                configMapKeyRef:
+                  key: oss_host
+                  name: oss
+            - name: OSS_CALLBACK_URL
+              valueFrom:
+                configMapKeyRef:
+                  key: oss_callback_url
+                  name: oss
+            - name: OSS_UPLOAD_DIR
+              valueFrom:
+                configMapKeyRef:
+                  key: oss_upload_dir
+                  name: oss
+            - name: OSS_EXPIRE_TIME
+              valueFrom:
+                configMapKeyRef:
+                  key: oss_expire_time
                   name: oss
           resources:
             limits:

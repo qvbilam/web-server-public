@@ -15,19 +15,27 @@ func InitConfig() {
 }
 
 func InitEnvConfig() {
-	portString := *flag.String("port", "9501", "server port")
-	port, _ := strconv.Atoi(portString)
-	ossExpireTimeString := *flag.String("oss_expire_time", "300", "oss expire time")
-	ossExpireTime, _ := strconv.Atoi(ossExpireTimeString)
+	serverPort := flag.String("port", "9501", "server port")
+	serverName := flag.String("server_name", "default-oss-web-server", "server name")
+	ossKey := flag.String("oss_key", "", "oss key")
+	ossSecrect := flag.String("oss_secrect", "", "oss secrect")
+	ossHost := flag.String("oss_host", "", "oss host")
+	ossCallbackUrl := flag.String("oss_callback_url", "", "oss callback")
+	ossUploadDir := flag.String("oss_upload_dir", "", "oss upload dir")
+	ossExpireTimeString := flag.String("oss_expire_time", "300", "oss expire time")
+	// 必须加, 否则将获取的配置值解析为定义的变量中
+	flag.Parse()
+	port, _ := strconv.Atoi(*serverPort)
+	ossExpireTime, _ := strconv.Atoi(*ossExpireTimeString)
 
-	global.ServerConfig.Name = *flag.String("name", "default-oss-web-server", "server name")
-	//global.ServerConfig.Host = *flag.String("host", "0.0.0.0", "server host")
+	// 写入全局变量
+	global.ServerConfig.Name = *serverName
 	global.ServerConfig.Port = int64(port)
-	global.ServerConfig.OssConfig.Key = *flag.String("oss_key", "", "oss key")
-	global.ServerConfig.OssConfig.Secrect = *flag.String("oss_secrect", "", "oss secret")
-	global.ServerConfig.OssConfig.Host = *flag.String("oss_host", "", "oss host")
-	global.ServerConfig.OssConfig.CallbackUrl = *flag.String("oss_callback_url", "", "oss callback")
-	global.ServerConfig.OssConfig.UploadDir = *flag.String("oss_upload_dir", "", "oss upload dir")
+	global.ServerConfig.OssConfig.Key = *ossKey
+	global.ServerConfig.OssConfig.Secrect = *ossSecrect
+	global.ServerConfig.OssConfig.Host = *ossHost
+	global.ServerConfig.OssConfig.CallbackUrl = *ossCallbackUrl
+	global.ServerConfig.OssConfig.UploadDir = *ossUploadDir
 	global.ServerConfig.OssConfig.ExpireTime = int64(ossExpireTime)
 }
 

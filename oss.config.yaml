@@ -5,7 +5,7 @@ metadata:
   labels:
     app: oss
 data:
-  name: oss-web-server
+  server_name: oss-web-server
   oss_key: LTAI5tGH3YwADGhBCyB3Cg3s
   oss_secrect: db9ieC5otI7oye6XlqGr2xPRQfe7sC
   oss_host: https://qvbilam.oss-cn-hangzhou.aliyuncs.com
