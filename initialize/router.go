@@ -20,9 +20,10 @@ func InitRouters() *gin.Engine {
 
 	router.GET("/", func(context *gin.Context) {
 		context.JSON(http.StatusOK, gin.H{
+			"home":    global.ServerConfig.Home,
 			"name":    global.ServerConfig.Name,
 			"tags":    global.ServerConfig.Tags,
-			"version": "1.0",
+			"version": "2.0.0",
 		})
 	})
 

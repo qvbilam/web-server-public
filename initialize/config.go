@@ -15,6 +15,7 @@ func InitConfig() {
 }
 
 func InitEnvConfig() {
+	home := flag.String("home", "cmd", "home")
 	serverPort := flag.String("port", "9501", "server port")
 	serverName := flag.String("server_name", "default-oss-web-server", "server name")
 	ossKey := flag.String("oss_key", "", "oss key")
@@ -23,12 +24,16 @@ func InitEnvConfig() {
 	ossCallbackUrl := flag.String("oss_callback_url", "", "oss callback")
 	ossUploadDir := flag.String("oss_upload_dir", "", "oss upload dir")
 	ossExpireTimeString := flag.String("oss_expire_time", "300", "oss expire time")
+
 	// 必须加, 否则将获取的配置值解析为定义的变量中
 	flag.Parse()
+
+	// 类型转换
 	port, _ := strconv.Atoi(*serverPort)
 	ossExpireTime, _ := strconv.Atoi(*ossExpireTimeString)
 
 	// 写入全局变量
+	global.ServerConfig.Home = *home
 	global.ServerConfig.Name = *serverName
 	global.ServerConfig.Port = int64(port)
 	global.ServerConfig.OssConfig.Key = *ossKey

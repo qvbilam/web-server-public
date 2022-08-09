@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: oss-web-server
-          image: registry.cn-hangzhou.aliyuncs.com/qvbilam/oss-web:1.0
+          image: registry.cn-hangzhou.aliyuncs.com/qvbilam/oss-web:2.0
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 9501
@@ -33,7 +33,7 @@ spec:
                 configMapKeyRef:
                   key: oss_key
                   name: oss
-            - name: OSS_SECRET
+            - name: OSS_SECRECT
               valueFrom:
                 configMapKeyRef:
                   key: oss_secrect
