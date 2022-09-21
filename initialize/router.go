@@ -28,7 +28,7 @@ func InitRouters() *gin.Engine {
 	})
 
 	// demo
-	router.LoadHTMLFiles(fmt.Sprintf("static/demo/index.html"))
+	router.LoadHTMLFiles("static/demo/index.html", "static/demo/sts-upload.html", "static/demo/upload-auth.html", "static/demo/video-player.html")
 	// 配置静态文件夹路径 第一个参数是api，第二个是文件夹路径
 	router.StaticFS("/static/demo", http.Dir(fmt.Sprintf("static/demo")))
 
@@ -36,6 +36,13 @@ func InitRouters() *gin.Engine {
 		// c.JSON：返回JSON格式的数据
 		c.HTML(http.StatusOK, "index.html", gin.H{
 			"title": "posts/index",
+		})
+	})
+
+	router.GET("/demo/upload", func(c *gin.Context) {
+		// c.JSON：返回JSON格式的数据
+		c.HTML(http.StatusOK, "upload-auth.html", gin.H{
+			"title": "posts/upload-auth.html",
 		})
 	})
 

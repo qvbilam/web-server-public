@@ -5,6 +5,8 @@ go get -u github.com/gin-gonic/gin
 
 # oss
 go get -u github.com/aliyun/aliyun-oss-go-sdk/oss
+# 点播
+go get -u github.com/aliyun/alibaba-cloud-sdk-go/sdk
 
 # 日志
 go get -u go.uber.org/zap

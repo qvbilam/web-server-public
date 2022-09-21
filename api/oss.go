@@ -6,13 +6,13 @@ import (
 	"net/http"
 	"net/url"
 	"oss/global"
-	"oss/utils"
+	"oss/utils/alibab/oss"
 	"strings"
 )
 
 // Token 获取token
 func Token(ctx *gin.Context) {
-	o := utils.Oss{
+	o := oss.Oss{
 		ExpireTime:  global.ServerConfig.OssConfig.ExpireTime,
 		UploadDir:   global.ServerConfig.OssConfig.UploadDir,
 		Host:        global.ServerConfig.OssConfig.Host,
@@ -30,7 +30,7 @@ func Token(ctx *gin.Context) {
 }
 
 func Callback(ctx *gin.Context) {
-	o := utils.Oss{}
+	o := oss.Oss{}
 	fmt.Println("\nHandle Post Request ... ")
 	// Get PublicKey bytes
 	bytePublicKey, err := o.GetPublicKey(ctx)
