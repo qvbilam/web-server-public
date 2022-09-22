@@ -1,27 +1,45 @@
 package upload
 
 import (
+	"github.com/aliyun/alibaba-cloud-sdk-go/sdk/requests"
 	"github.com/aliyun/alibaba-cloud-sdk-go/services/vod"
+	"strconv"
 )
 
+type CreateUpdateVideoParams struct {
+	Title       string
+	Description string
+	FileName    string
+	CategoryId  int64
+	Cover       string
+	Tags        string
+}
+
+type RefreshVideoUploadParams struct {
+	AliVideoId string
+}
+
+type CreateUpdateImageParams struct {
+}
+
 // CreateVideoUploadCertificate 创建视频上传凭证
-func CreateVideoUploadCertificate(client *vod.Client) (response *vod.CreateUploadVideoResponse, err error) {
+func CreateVideoUploadCertificate(client *vod.Client, params *CreateUpdateVideoParams) (response *vod.CreateUploadVideoResponse, err error) {
 	request := vod.CreateCreateUploadVideoRequest()
-	request.Title = "Sample Video Title"
-	request.Description = "Sample Description"
-	request.FileName = "/opt/video/sample/video_file.mp4"
-	//request.CateId = "-1"
-	request.CoverURL = "http://192.168.0.0/16/tps/TB1qnJ1PVXXXXXCXXXXXXXXXXXX-700-700.png"
-	request.Tags = "tag1,tag2"
+	request.Title = params.Title
+	request.Description = params.Description
+	request.FileName = params.FileName
+	request.CateId = requests.Integer(strconv.FormatInt(params.CategoryId, 10))
+	request.CoverURL = params.Cover
+	request.Tags = params.Tags
 
 	request.AcceptFormat = "JSON"
 	return client.CreateUploadVideo(request)
 }
 
 // RefreshVideoUploadCertificate 刷新视频上传凭证
-func RefreshVideoUploadCertificate(client *vod.Client) (response *vod.RefreshUploadVideoResponse, err error) {
+func RefreshVideoUploadCertificate(client *vod.Client, params *RefreshVideoUploadParams) (response *vod.RefreshUploadVideoResponse, err error) {
 	request := vod.CreateRefreshUploadVideoRequest()
-	request.VideoId = "6657f89a86fa4f76a295ae95636e****"
+	request.VideoId = params.AliVideoId
 	request.AcceptFormat = "JSON"
 
 	return client.RefreshUploadVideo(request)
@@ -34,7 +52,7 @@ func CreateUploadImageCertificate(client *vod.Client) (response *vod.CreateUploa
 	request.ImageType = "cover"
 	request.ImageExt = "jpg"
 	request.Title = "Sample Image Title"
-	//request.CateId = "-1"
+	request.CateId = "-1"
 	request.Tags = "tag1,tag2"
 
 	request.AcceptFormat = "JSON"
