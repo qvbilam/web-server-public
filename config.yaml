@@ -1,12 +1,10 @@
-{
-  "name": "oss-web-server",
-  "tags":["oss", "web"],
-  "oss":{
-    "key":"LTAI5tGH3YwADGhBCyB3Cg3s",
-    "secrect":"db9ieC5otI7oye6XlqGr2xPRQfe7sC",
-    "host":"https://qvbilam.oss-cn-hangzhou.aliyuncs.com",
-    "callback_url":"http://nn4fhx.natappfree.cc/v1/callback",
-    "upload_dir":"user-images/",
-    "expire_time": 300
-  }
-}
+name: "oss-web-server"
+port: 9700
+tags: ["oss", "web"]
+oss:
+  key: "LTAI5tGH3YwADGhBCyB3Cg3s"
+  secrect: "db9ieC5otI7oye6XlqGr2xPRQfe7sC"
+  host: "https://qvbilam.oss-cn-hangzhou.aliyuncs.com"
+  callback_url: "http://nn4fhx.natappfree.cc/v1/callback"
+  upload_dir: "user-images/"
+  expire_time: 300

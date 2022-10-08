@@ -22,8 +22,19 @@ type RefreshVideoUploadParams struct {
 type CreateUpdateImageParams struct {
 }
 
-// CreateVideoUploadCertificate 创建视频上传凭证
-func CreateVideoUploadCertificate(client *vod.Client, params *CreateUpdateVideoParams) (response *vod.CreateUploadVideoResponse, err error) {
+func NewCreateUpdateVideoParams(title, desc, fileName, cover, tags string, categoryId int64) *CreateUpdateVideoParams {
+	return &CreateUpdateVideoParams{
+		Title:       title,
+		Description: desc,
+		FileName:    fileName,
+		CategoryId:  categoryId,
+		Cover:       cover,
+		Tags:        tags,
+	}
+}
+
+// CreateUploadVideoCertificate 创建视频上传凭证
+func CreateUploadVideoCertificate(client *vod.Client, params *CreateUpdateVideoParams) (response *vod.CreateUploadVideoResponse, err error) {
 	request := vod.CreateCreateUploadVideoRequest()
 	request.Title = params.Title
 	request.Description = params.Description
@@ -36,8 +47,8 @@ func CreateVideoUploadCertificate(client *vod.Client, params *CreateUpdateVideoP
 	return client.CreateUploadVideo(request)
 }
 
-// RefreshVideoUploadCertificate 刷新视频上传凭证
-func RefreshVideoUploadCertificate(client *vod.Client, params *RefreshVideoUploadParams) (response *vod.RefreshUploadVideoResponse, err error) {
+// RefreshUploadVideoCertificate  刷新视频上传凭证
+func RefreshUploadVideoCertificate(client *vod.Client, params *RefreshVideoUploadParams) (response *vod.RefreshUploadVideoResponse, err error) {
 	request := vod.CreateRefreshUploadVideoRequest()
 	request.VideoId = params.AliVideoId
 	request.AcceptFormat = "JSON"
