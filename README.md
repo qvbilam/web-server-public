@@ -14,6 +14,8 @@ go get -u go.uber.org/zap
 # 配置(后者用来读取系统参数
 # go get -u github.com/spf13/viper
 go get -u github.com/namsral/flag
+
+go get -u google.golang.org/grpc
 ```
 
 ## 部署

@@ -1,6 +1,6 @@
-name: "oss-web-server"
+name: "file-web-server"
 port: 9700
-tags: ["oss", "web"]
+tags: ["file", "web"]
 oss:
   key: "LTAI5tGH3YwADGhBCyB3Cg3s"
   secrect: "db9ieC5otI7oye6XlqGr2xPRQfe7sC"

@@ -1,18 +1,22 @@
 package main
 
 import (
+	"file/global"
+	"file/initialize"
 	"fmt"
 	"go.uber.org/zap"
 	"os"
 	"os/signal"
-	"oss/global"
-	"oss/initialize"
 	"syscall"
 )
 
 func main() {
 	initialize.InitLogger()
 	initialize.InitConfig()
+	// 初始化表单验证
+	if err := initialize.InitValidateTran("zh"); err != nil {
+		zap.S().Panic("翻译器初始化失败: ", err.Error())
+	}
 	Router := initialize.InitRouters()
 
 	Name := global.ServerConfig.Name

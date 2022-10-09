@@ -1,10 +1,10 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: oss-web-server
+  name: file-web-server
 spec:
   selector:
-    app: oss-web-server
+    app: file-web-server
   ports:
     - protocol: TCP
       port: 9501

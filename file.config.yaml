@@ -1,9 +1,9 @@
 apiVersion: "v1"
 kind: ConfigMap
 metadata:
-  name: oss
+  name: file
   labels:
-    app: oss
+    app: file
 data:
   server_name: oss-web-server
   oss_key: LTAI5tGH3YwADGhBCyB3Cg3s

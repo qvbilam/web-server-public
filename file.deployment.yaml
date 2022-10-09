@@ -1,24 +1,24 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: oss-web-server
+  name: file-web-server
   labels:
-    app: oss-web-server
+    app: file-web-server
 spec:
   replicas: 1
   strategy:
     type: RollingUpdate
   selector:
     matchLabels:
-      app: oss-web-server
+      app: file-web-server
   template:
     metadata:
       labels:
-        app: oss-web-server
+        app: file-web-server
     spec:
       containers:
-        - name: oss-web-server
-          image: registry.cn-hangzhou.aliyuncs.com/qvbilam/oss-web:2.0
+        - name: file-web-server
+          image: registry.cn-hangzhou.aliyuncs.com/qvbilam/file-web:2.0
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 9501
@@ -27,37 +27,37 @@ spec:
               valueFrom:
                 configMapKeyRef:
                   key: server_name
-                  name: oss
+                  name: file
             - name: OSS_KEY
               valueFrom:
                 configMapKeyRef:
                   key: oss_key
-                  name: oss
+                  name: file
             - name: OSS_SECRECT
               valueFrom:
                 configMapKeyRef:
                   key: oss_secrect
-                  name: oss
+                  name: file
             - name: OSS_HOST
               valueFrom:
                 configMapKeyRef:
                   key: oss_host
-                  name: oss
+                  name: file
             - name: OSS_CALLBACK_URL
               valueFrom:
                 configMapKeyRef:
                   key: oss_callback_url
-                  name: oss
+                  name: file
             - name: OSS_UPLOAD_DIR
               valueFrom:
                 configMapKeyRef:
                   key: oss_upload_dir
-                  name: oss
+                  name: file
             - name: OSS_EXPIRE_TIME
               valueFrom:
                 configMapKeyRef:
                   key: oss_expire_time
-                  name: oss
+                  name: file
           resources:
             limits:
               cpu: 100m

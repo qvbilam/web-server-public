@@ -1,12 +1,12 @@
 package api
 
 import (
+	"file/global"
+	"file/utils/alibab/oss"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"net/url"
-	"oss/global"
-	"oss/utils/alibab/oss"
 	"strings"
 )
 
