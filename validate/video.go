@@ -7,6 +7,6 @@ type CreateVideoValidate struct {
 
 	FileName string `form:"file_name" json:"file_name" binding:"required"`
 	FileSha1 string `form:"file_sha1" json:"file_sha1" binding:"required"`
-	FileType string `form:"file_type" json:"file_type" binding:"required,oneof=mp4 flv mpeg avi"`
+	FileType string `form:"file_type" json:"file_type" binding:"required,oneof=video/mp4 flv mpeg avi"`
 	Tags     string `form:"tags" json:"tags" binding:"omitempty"`
 }
