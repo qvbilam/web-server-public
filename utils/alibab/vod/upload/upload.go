@@ -22,13 +22,12 @@ type RefreshVideoUploadParams struct {
 type CreateUpdateImageParams struct {
 }
 
-func NewCreateUpdateVideoParams(title, desc, fileName, cover, tags string, categoryId int64) *CreateUpdateVideoParams {
+func NewCreateUpdateVideoParams(title, desc, fileName, tags string, categoryId int64) *CreateUpdateVideoParams {
 	return &CreateUpdateVideoParams{
 		Title:       title,
 		Description: desc,
 		FileName:    fileName,
 		CategoryId:  categoryId,
-		Cover:       cover,
 		Tags:        tags,
 	}
 }
@@ -40,7 +39,6 @@ func CreateUploadVideoCertificate(client *vod.Client, params *CreateUpdateVideoP
 	request.Description = params.Description
 	request.FileName = params.FileName
 	request.CateId = requests.Integer(strconv.FormatInt(params.CategoryId, 10))
-	request.CoverURL = params.Cover
 	request.Tags = params.Tags
 
 	request.AcceptFormat = "JSON"

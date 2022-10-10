@@ -1,2 +1,10 @@
 # 上传视频
 POST http://127.0.0.1:9700/v1/video
+Content-Type: application/json
+
+{
+  "cover": "https://blog.qvbilam.xin/usr/themes/handsome/usr/img/sj/40.jpg",
+  "file_name": "tmd.mp4",
+  "file_sha1": "123124123",
+  "file_type": "mp4"
+}

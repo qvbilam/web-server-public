@@ -61,6 +61,12 @@ func ErrorForbidden(ctx *gin.Context, message string) {
 	})
 }
 
+func ErrorAlreadyExists(ctx *gin.Context, message string) {
+	ctx.JSON(http.StatusFound, gin.H{
+		responseFieldMessage: message,
+	})
+}
+
 // ErrorNotfound 没有找到
 func ErrorNotfound(ctx *gin.Context, message string) {
 	ctx.JSON(http.StatusNotFound, gin.H{
@@ -126,7 +132,7 @@ func removeTopStruct(fields map[string]string) map[string]string {
 	for field, err := range fields {
 		// 获取第一个 . 出现的位置
 		position := strings.Index(field, ".")
-		fmt.Println(field, position)
+		//fmt.Println(field, position)
 
 		// 获取截取后的 key 名
 		key := field[position+1:]

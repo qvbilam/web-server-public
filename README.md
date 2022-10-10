@@ -16,6 +16,9 @@ go get -u go.uber.org/zap
 go get -u github.com/namsral/flag
 
 go get -u google.golang.org/grpc
+
+# grpc 重连
+go get -u github.com/grpc-ecosystem/go-grpc-middleware/retry
 ```
 
 ## 部署

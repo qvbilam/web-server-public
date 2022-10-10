@@ -8,3 +8,12 @@ oss:
   callback_url: "http://nn4fhx.natappfree.cc/v1/callback"
   upload_dir: "user-images/"
   expire_time: 300
+
+user-server:
+  host: "127.0.0.1"
+  port: 9801
+  name: "grpc-user-server"
+file-server:
+  host: "127.0.0.1"
+  port: 9803
+  name: "grpc-video-server"
