@@ -13,6 +13,7 @@ import (
 func main() {
 	initialize.InitLogger()
 	initialize.InitConfig()
+	initialize.InitServer()
 	// 初始化表单验证
 	if err := initialize.InitValidateTran("zh"); err != nil {
 		zap.S().Panic("翻译器初始化失败: ", err.Error())
