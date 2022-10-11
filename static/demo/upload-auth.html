@@ -278,8 +278,20 @@
                 }
                 uploader = createUploader()
                 // 首先调用 uploader.addFile(event.target.files[i], null, null, null, userData)
+                console.log(res)
                 console.log(uploader,'2222222')
-                uploader.addFile(file, null, null, null, userData)
+                console.log(res.data.certificate.UploadAddress)
+                console.log(res.data.certificate.UploadAuth)
+                console.log(res.data.certificate.VideoId)
+                const newFile={
+                  ...file,
+                  // address: res.data.certificate.UploadAddress,
+                  // auth: res.data.certificate.UploadAuth,
+                  // videoId: res.data.certificate.VideoId,
+                }
+
+                // uploader.addFile(file, null, null, null, userData)
+                uploader.addFile(newFile, null, null, null, userData)
                 $('#authUpload').attr('disabled', false)
                 $('#pauseUpload').attr('disabled', true)
                 $('#resumeUpload').attr('disabled', true)
