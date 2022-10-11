@@ -10,14 +10,34 @@ import (
 	"file/validate"
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"strconv"
 )
 
+type videoCertificateResponse struct {
+	Id          int64       `json:"id"`
+	Certificate interface{} `json:"certificate"`
+}
+
+type videoDetailResponse struct {
+	Id          int64  `json:"id"`
+	UserId      int64  `json:"user_id"`
+	BusinessId  string `json:"business_id"`
+	Url         string `json:"url"`
+	Channel     string `json:"channel"`
+	ContentType string `json:"content_type"`
+	Status      string `json:"status"`
+	Duration    int64  `json:"duration"`
+	Size        int64  `json:"size"`
+	Expand      string `json:"expand"`
+}
+
+// CreateUploadVideo 创建上传视频凭证
 func CreateUploadVideo(ctx *gin.Context) {
-	userId := 1
+	userId := 1 // todo 验证用户id
 	key := global.ServerConfig.OssConfig.Key
 	secret := global.ServerConfig.OssConfig.Secrect
 
-	request := validate.CreateVideoValidate{}
+	request := validate.CreateCertificateVideoValidate{}
 	if err := ctx.ShouldBindJSON(&request); err != nil {
 		HandleValidateError(ctx, err)
 		return
@@ -51,7 +71,7 @@ func CreateUploadVideo(ctx *gin.Context) {
 	params := upload.NewCreateUpdateVideoParams(title, desc, fileName, tags, int64(categoryId))
 	certificate, err := upload.CreateUploadVideoCertificate(client, params)
 	if err != nil {
-		ErrorInternal(ctx, "create upload video certificate error")
+		ErrorInternal(ctx, "create upload video certificate error"+err.Error())
 		return
 	}
 
@@ -69,9 +89,91 @@ func CreateUploadVideo(ctx *gin.Context) {
 		return
 	}
 
-	SuccessNotMessage(ctx, gin.H{
-		"id":          rsp.Id,
-		"certificate": certificate,
+	SuccessNotMessage(ctx, videoCertificateResponse{
+		Id:          rsp.Id,
+		Certificate: certificate,
+	})
+}
+
+// RefreshUploadVideo 刷新视频凭证
+func RefreshUploadVideo(ctx *gin.Context) {
+	request := validate.RefreshCertificateVideoValidate{}
+	if err := ctx.ShouldBindJSON(&request); err != nil {
+		HandleValidateError(ctx, err)
+		return
+	}
+	businessId := request.BusinessId
+
+	// 验证是否存在
+	video, err := global.FileVideoServerClient.GetDetail(context.Background(), &proto.GetVideoRequest{BusinessId: businessId})
+	if err != nil {
+		HandleGrpcErrorToHttp(ctx, err)
+		return
+	}
+	if video.Id == 0 {
+		ErrorNotfound(ctx, "not found video file")
+		return
+	}
+
+	// 生成上传凭证
+	key := global.ServerConfig.OssConfig.Key
+	secret := global.ServerConfig.OssConfig.Secrect
+	client, err := vod.InitVodClient(key, secret)
+	if err != nil {
+		ErrorInternal(ctx, "init vod client error")
+		return
+	}
+
+	certificate, err := upload.RefreshUploadVideoCertificate(client, &upload.RefreshVideoUploadParams{AliVideoId: businessId})
+	if err != nil {
+		ErrorInternal(ctx, "refresh upload video certificate error"+err.Error())
+		return
+	}
+
+	SuccessNotMessage(ctx, videoCertificateResponse{
+		Id:          video.Id,
+		Certificate: certificate,
+	})
+}
+
+// GetVideoDetail 获取视频信息
+func GetVideoDetail(ctx *gin.Context) {
+	request := validate.GetFileVideoValidate{}
+	if err := ctx.ShouldBindJSON(&request); err != nil {
+		HandleValidateError(ctx, err)
+		return
+	}
+	paramId := ctx.Param("id")
+	id, _ := strconv.Atoi(paramId)
+
+	businessId := request.BusinessId
+	fileSha1 := request.FileSha1
+	if id == 0 && businessId == "" && fileSha1 == "" {
+		Error(ctx, "bad request")
+		return
+	}
+
+	v, err := global.FileVideoServerClient.GetDetail(context.Background(), &proto.GetVideoRequest{
+		Id:         int64(id),
+		BusinessId: businessId,
+		FileSha1:   fileSha1,
+	})
+	if err != nil {
+		HandleGrpcErrorToHttp(ctx, err)
+		return
+	}
+
+	SuccessNotMessage(ctx, videoDetailResponse{
+		Id:          v.Id,
+		UserId:      v.UserId,
+		BusinessId:  v.BusinessId,
+		Url:         v.Url,
+		Duration:    v.Duration,
+		Size:        v.Size,
+		Channel:     v.Channel,
+		ContentType: v.ContentType,
+		Status:      v.Status,
+		Expand:      v.Expand,
 	})
 }
 
