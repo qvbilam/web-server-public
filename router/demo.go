@@ -27,4 +27,11 @@ func InitDemoRouter(Router *gin.Engine) {
 			"title": "posts/upload-auth.html",
 		})
 	})
+
+	Router.GET("/demo/player", func(c *gin.Context) {
+		// c.JSON：返回JSON格式的数据
+		c.HTML(http.StatusOK, "video-player.html", gin.H{
+			"title": "posts/video-player.html",
+		})
+	})
 }

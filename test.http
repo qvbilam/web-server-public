@@ -21,3 +21,14 @@ Content-Type: application/json
 #  },
 #  "msg": ""
 #}
+
+
+### 视频回调
+POST http://127.0.0.1:9501/v1/callback/vod?test=1&demo=callback
+Authorization: 123
+Content-Type: application/json
+
+{
+  "name": "QvBiLam",
+  "avatar": "https://www.baodu.com"
+}

@@ -32,5 +32,6 @@ func InitRouters() *gin.Engine {
 	customizeRouter.InitDemoRouter(router)
 	customizeRouter.InitOssRouter(apiRouter)
 	customizeRouter.InitVideoRouter(apiRouter)
+	customizeRouter.InitCallbackRouter(apiRouter)
 	return router
 }
