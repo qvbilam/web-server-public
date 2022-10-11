@@ -12,10 +12,10 @@ type CreateCertificateVideoValidate struct {
 }
 
 type RefreshCertificateVideoValidate struct {
-	BusinessId string `form:"file_name" json:"file_name" binding:"required"`
+	BusinessId string `form:"business_id" json:"business_id" binding:"required"`
 }
 
 type GetFileVideoValidate struct {
-	BusinessId string `form:"file_name" json:"file_name" binding:"omitempty"`
+	BusinessId string `form:"business_id" json:"business_id" binding:"omitempty"`
 	FileSha1   string `form:"file_sha1" json:"file_sha1" binding:"omitempty"`
 }

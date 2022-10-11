@@ -140,6 +140,35 @@
         }
     }
     $(document).ready(function () {
+      /**
+       * 请求凭证和上传地址
+       */
+      const getAddress=(params,type,uploadInfo)=>{
+        var createUrl = 'http://127.0.0.1:9501/v1/video/certificate';
+        $.ajax({
+          type: type,
+          url: createUrl,
+          data:JSON.stringify(params),
+          contentType: "application/json;charset=UTF-8",
+          dataType: "json",
+          success: function (res) {
+            if(res.data?.certificate){
+              const data=res.data?.certificate;
+              console.log(data,'datra')
+              var uploadAuth = data.UploadAuth
+              var uploadAddress = data.UploadAddress
+              var videoId = data.VideoId
+              uploader.setUploadAuthAndAddress(uploadInfo, uploadAuth, uploadAddress,videoId)
+            }
+          },
+          error: function (err) {
+            console.log(err, 'err')
+            if(err.status===302){
+
+            }
+          }
+        });
+      }
       /** 
        * 创建一个上传对象
        * 使用 UploadAuth 上传方式
@@ -163,36 +192,40 @@
           },
           // 开始上传
           onUploadstarted: function (uploadInfo) {
+            console.log(uploadInfo,111111)
             // 如果是 UploadAuth 上传方式, 需要调用 uploader.setUploadAuthAndAddress 方法
             // 如果是 UploadAuth 上传方式, 需要根据 uploadInfo.videoId是否有值，调用点播的不同接口获取uploadauth和uploadAddress
             // 如果 uploadInfo.videoId 有值，调用刷新视频上传凭证接口，否则调用创建视频上传凭证接口
             // 注意: 这里是测试 demo 所以直接调用了获取 UploadAuth 的测试接口, 用户在使用时需要判断 uploadInfo.videoId 存在与否从而调用 openApi
             // 如果 uploadInfo.videoId 存在, 调用 刷新视频上传凭证接口(https://help.aliyun.com/document_detail/55408.html)
             // 如果 uploadInfo.videoId 不存在,调用 获取视频上传地址和凭证接口(https://help.aliyun.com/document_detail/55407.html)
+
+            uploadInfo.videoId = "d53a78510e214d9395a5cafc69d39fa8";
             if (!uploadInfo.videoId) {
               console.log(uploadInfo,'uploadInfo')
-              var createUrl = uploadAddress
+
               // var createUrl = `https://outin-6bdf88336b3911e9a5d400163e1c8a9c.oss-cn-shanghai.aliyuncs.com/voddemo/CreateUploadVideo?Title=${uploadInfo.file.name}&FileName${uploadInfo.file.name}&BusinessType=${}&TerminalType=${}pc&DeviceModel=${}&UUID=${}&AppVersion=${}&VideoId=${}`;
-              $.get(createUrl, function (data) {
-                console.log(data,'datra')
-                var uploadAuth = data.UploadAuth
-                var uploadAddress = data.UploadAddress
-                var videoId = data.VideoId
-                uploader.setUploadAuthAndAddress(uploadInfo, uploadAuth, uploadAddress,videoId)
-              }, 'json')
+              const params={
+                file_name:uploadInfo.file.name,
+                file_sha1: uploadInfo.file.sha1.toString()+(new Date()).getTime() ,
+                file_type: uploadInfo.file.type,
+              }
+              getAddress(params,'post',uploadInfo);
               $('#status').text('文件开始上传...')
               console.log("onUploadStarted:" + uploadInfo.file.name + ", endpoint:" + uploadInfo.endpoint + ", bucket:" + uploadInfo.bucket + ", object:" + uploadInfo.object)
             } else {
+              console.log("refresh!")
               // 如果videoId有值，根据videoId刷新上传凭证
               // https://help.aliyun.com/document_detail/55408.html?spm=a2c4g.11186623.6.630.BoYYcY
               // var refreshUrl = 'https://demo-vod.cn-shanghai.aliyuncs.com/voddemo/RefreshUploadVideo?BusinessType=vodai&TerminalType=pc&DeviceModel=iPhone9,2&UUID=59ECA-4193-4695-94DD-7E1247288&AppVersion=1.0.0&Title=haha1&FileName=xxx.mp4&VideoId=' + uploadInfo.videoId
               var refreshUrl = 'https://demo-vod.cn-shanghai.aliyuncs.com/voddemo/RefreshUploadVideo?BusinessType=vodai&TerminalType=pc&DeviceModel=iPhone9,2&UUID=59ECA-4193-4695-94DD-7E1247288&AppVersion=1.0.0&Title=haha1&FileName=xxx.mp4&VideoId=' + uploadInfo.videoId
-              $.get(refreshUrl, function (data) {
-                var uploadAuth = data.UploadAuth
-                var uploadAddress = data.UploadAddress
-                var videoId = data.VideoId
-                uploader.setUploadAuthAndAddress(uploadInfo, uploadAuth, uploadAddress,videoId)
-              }, 'json')
+              getAddress({business_id:uploadInfo.videoId},'put',uploadInfo);
+              // $.get(refreshUrl, function (data) {
+              //   var uploadAuth = data.UploadAuth
+              //   var uploadAddress = data.UploadAddress
+              //   var videoId = data.VideoId
+              //   uploader.setUploadAuthAndAddress(uploadInfo, uploadAuth, uploadAddress,videoId)
+              // }, 'json')
             }
           },
           // 文件上传成功
@@ -252,61 +285,23 @@
 
         var userData = '{"Vod":{}}'
 
-        $.hash.getSha1FromFile(file,(e, sha1)=> {
-          file.sha1 = sha1;
+        $.hash.getSha1FromFile(file,(e, sha1)=>file.sha1 = sha1);
 
-          console.log(file,'filesha1')
-
-          const params={
-            file_name:file.name,
-            file_sha1: file.sha1.toString()+(new Date()).getTime() ,
-            file_type: file.type,
-          }
-
-          $.ajax({
-            type: "post",
-            url: 'http://127.0.0.1:9700/v1/video',
-            data:JSON.stringify(params),
-            contentType: "application/json;charset=UTF-8",
-            dataType: "json",
-            success: function (res) {
-              if(res.data?.certificate){
-                if (uploader) {
-                  uploader.stopUpload()
-                  $('#auth-progress').text('0')
-                  $('#status').text("")
-                }
-                uploader = createUploader()
-                // 首先调用 uploader.addFile(event.target.files[i], null, null, null, userData)
-                console.log(res)
-                console.log(uploader,'2222222')
-                console.log(res.data.certificate.UploadAddress)
-                console.log(res.data.certificate.UploadAuth)
-                console.log(res.data.certificate.VideoId)
-                const newFile={
-                  ...file,
-                  // address: res.data.certificate.UploadAddress,
-                  // auth: res.data.certificate.UploadAuth,
-                  // videoId: res.data.certificate.VideoId,
-                }
-
-                // uploader.addFile(file, null, null, null, userData)
-                uploader.addFile(newFile, null, null, null, userData)
-                $('#authUpload').attr('disabled', false)
-                $('#pauseUpload').attr('disabled', true)
-                $('#resumeUpload').attr('disabled', true)
-                // uploader.onUploadstarted(res.data.certificate)
-              }
-            },
-            error: function (err) {
-              console.log(err, 'err')
-              if(err.status===302){
-
-              }
-            }
-          });
-        });
+        if (uploader) {
+          uploader.stopUpload()
+          $('#auth-progress').text('0')
+          $('#status').text("")
+        }
+        uploader = createUploader();
+        // 首先调用 uploader.addFile(event.target.files[i], null, null, null, userData)
+        // uploader.addFile(file, null, null, null, userData)
+        uploader.addFile(file, null, null, null, userData)
+        $('#authUpload').attr('disabled', false)
+        $('#pauseUpload').attr('disabled', true)
+        $('#resumeUpload').attr('disabled', true)
+        // uploader.onUploadstarted(res.data.certificate)
       })
+
 
       // 第一种方式 UploadAuth 上传 
       $('#authUpload').on('click', function () {
