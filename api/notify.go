@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"log"
+	"net/http"
 	"os"
 	"time"
 )
@@ -16,37 +17,56 @@ type RequestParams struct {
 
 func AliVideoCallback(ctx *gin.Context) {
 	// 获取参数
-	//r := RequestParams{}
-	fmt.Println("========== header ==========")
+	r := RequestParams{}
+	body := make(map[string]interface{})
+	headers := make(map[string]interface{})
+	// header
 	for k, v := range ctx.Request.Header {
 		//r.Headers[k] = v
-		fmt.Printf("header-%s: %s\n", k, v)
+		//fmt.Printf("header-%s: %s\n", k, v[0])
+		headers[k] = v[0]
 	}
 
-	fmt.Println("========== form ==========")
-	for k, v := range ctx.Request.PostForm {
-		fmt.Printf("param-%s: %s\n", k, v)
+	// form
+	data, _ := ctx.GetRawData()
+	var formBody map[string]string
+	_ = json.Unmarshal(data, &body)
+	for k, v := range formBody {
+		//fmt.Printf("form-%s: %s\n", k, v)
+		body[k] = v[0]
 	}
 
-	fmt.Println("========== query ==========")
+	// query
 	for k, v := range ctx.Request.URL.Query() {
-		fmt.Printf("query-%s: %s\n", k, v)
+		//fmt.Printf("query-%s: %s\n", k, v)
+		body[k] = v[0]
 	}
 
-	req, _ := ctx.GetRawData()
-	fmt.Println(json.Marshal(req))
-	return
+	r.Body = body
+	r.Headers = headers
+	req, _ := json.Marshal(r)
 
 	// 写入文件
-	file, err := os.OpenFile("./log/test.log", os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0)
+	fileName := fmt.Sprintf("%s-%s.log", "notify-video", time.Now().Format("2006-01-02"))
+	filePath := fmt.Sprintf("./log/%s", fileName)
+	file, err := os.OpenFile(filePath, os.O_CREATE|os.O_APPEND|os.O_RDWR, os.ModePerm)
+	defer func(file *os.File) {
+		err := file.Close()
+		if err != nil {
+
+		}
+	}(file)
+
 	if err != nil {
 		fmt.Printf("write log err: %s\n", err)
 		return
 	}
 	log.SetOutput(file)
 
-	params := ctx.Params
-	//headers := ctx.Header
+	log.SetFlags(log.Ltime | log.Ldate)
+	log.Printf(string(req))
 
-	log.Printf("%s param: %s, header: %s\n", time.Now(), params)
+	ctx.JSON(http.StatusOK, gin.H{
+		"message": "ok",
+	})
 }

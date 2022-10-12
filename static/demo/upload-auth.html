@@ -60,48 +60,6 @@
 </head>
 <body>
   <div class="container">
-    <div class="setting">
-      <div class="input-control">
-        <label for="timeout">请求过期时间（配置项 timeout, 默认 60000）:</label>
-        <input type="text" id="timeout" placeholder="输入过期时间, 单位毫秒">
-      </div>
-
-      <div class="input-control">
-        <label for="partSize">分片大小（配置项 partSize, 默认 1048576）:</label>
-        <input type="text" class="form-control" id="partSize" placeholder="输入分片大小, 单位bit, 最小100k">
-      </div>
-
-      <div class="input-control">
-        <label for="parallel">上传分片数（配置项 parallel, 默认 5）:</label>
-        <input type="text" class="form-control" id="parallel" placeholder="输入并行上传分片个数, 默认为5">
-      </div>
-
-      <div class="input-control">
-        <label for="retryCount">网络失败重试次数（配置项 retryCount, 默认 3）:</label>
-        <input type="text" class="form-control" id="retryCount" placeholder="输入网络失败重试次数, 默认为3">
-      </div>
-
-      <div class="input-control">
-        <label for="retryDuration">网络失败重试间隔（配置项 retryDuration, 默认 2）:</label>
-        <input type="text" class="form-control" id="retryDuration" placeholder="输入网络失败重试间隔, 默认2秒">
-      </div>
-
-      <div class="input-control">
-        <label for="region">配置项 region, 默认 cn-shanghai:</label>
-        <select id="region">
-          <option>cn-shanghai</option>
-          <option>eu-central-1</option>
-          <option>ap-southeast-1</option>
-        </select>
-      </div>
-
-      <div class="input-control">
-        <label for="userId">阿里云账号ID:</label>
-        <input type="text" value="1303984639806000" disabled class="form-control" id="userId" placeholder="输入阿里云账号ID">
-        userId必填，只需要有值即可
-      </div>
-
-    </div>
 
     <div class="upload">
       <div>
@@ -117,7 +75,6 @@
         <span></span>
       </div>
     </div>
-    <div class="info">uploadAuth及uploadAddress参数请查看<a href="https://help.aliyun.com/document_detail/55407.html" target="_blank">获取上传地址和凭证 </a></div>
   </div>
   <script type="module">
      //兼容IE11
@@ -192,19 +149,11 @@
           },
           // 开始上传
           onUploadstarted: function (uploadInfo) {
-            console.log(uploadInfo,111111)
-            // 如果是 UploadAuth 上传方式, 需要调用 uploader.setUploadAuthAndAddress 方法
-            // 如果是 UploadAuth 上传方式, 需要根据 uploadInfo.videoId是否有值，调用点播的不同接口获取uploadauth和uploadAddress
-            // 如果 uploadInfo.videoId 有值，调用刷新视频上传凭证接口，否则调用创建视频上传凭证接口
-            // 注意: 这里是测试 demo 所以直接调用了获取 UploadAuth 的测试接口, 用户在使用时需要判断 uploadInfo.videoId 存在与否从而调用 openApi
-            // 如果 uploadInfo.videoId 存在, 调用 刷新视频上传凭证接口(https://help.aliyun.com/document_detail/55408.html)
-            // 如果 uploadInfo.videoId 不存在,调用 获取视频上传地址和凭证接口(https://help.aliyun.com/document_detail/55407.html)
+            console.log(uploadInfo,111111, uploadInfo.videoId)
 
-            uploadInfo.videoId = "d53a78510e214d9395a5cafc69d39fa8";
             if (!uploadInfo.videoId) {
               console.log(uploadInfo,'uploadInfo')
 
-              // var createUrl = `https://outin-6bdf88336b3911e9a5d400163e1c8a9c.oss-cn-shanghai.aliyuncs.com/voddemo/CreateUploadVideo?Title=${uploadInfo.file.name}&FileName${uploadInfo.file.name}&BusinessType=${}&TerminalType=${}pc&DeviceModel=${}&UUID=${}&AppVersion=${}&VideoId=${}`;
               const params={
                 file_name:uploadInfo.file.name,
                 file_sha1: uploadInfo.file.sha1.toString()+(new Date()).getTime() ,
@@ -218,7 +167,7 @@
               // 如果videoId有值，根据videoId刷新上传凭证
               // https://help.aliyun.com/document_detail/55408.html?spm=a2c4g.11186623.6.630.BoYYcY
               // var refreshUrl = 'https://demo-vod.cn-shanghai.aliyuncs.com/voddemo/RefreshUploadVideo?BusinessType=vodai&TerminalType=pc&DeviceModel=iPhone9,2&UUID=59ECA-4193-4695-94DD-7E1247288&AppVersion=1.0.0&Title=haha1&FileName=xxx.mp4&VideoId=' + uploadInfo.videoId
-              var refreshUrl = 'https://demo-vod.cn-shanghai.aliyuncs.com/voddemo/RefreshUploadVideo?BusinessType=vodai&TerminalType=pc&DeviceModel=iPhone9,2&UUID=59ECA-4193-4695-94DD-7E1247288&AppVersion=1.0.0&Title=haha1&FileName=xxx.mp4&VideoId=' + uploadInfo.videoId
+
               getAddress({business_id:uploadInfo.videoId},'put',uploadInfo);
               // $.get(refreshUrl, function (data) {
               //   var uploadAuth = data.UploadAuth
