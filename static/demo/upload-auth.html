@@ -101,7 +101,7 @@
        * 请求凭证和上传地址
        */
       const getAddress=(params,type,uploadInfo)=>{
-        var createUrl = 'http://127.0.0.1:9501/v1/video/certificate';
+        var createUrl = 'http://127.0.0.1:9501/v1/video/upload/certificate';
         $.ajax({
           type: type,
           url: createUrl,
@@ -164,17 +164,7 @@
               console.log("onUploadStarted:" + uploadInfo.file.name + ", endpoint:" + uploadInfo.endpoint + ", bucket:" + uploadInfo.bucket + ", object:" + uploadInfo.object)
             } else {
               console.log("refresh!")
-              // 如果videoId有值，根据videoId刷新上传凭证
-              // https://help.aliyun.com/document_detail/55408.html?spm=a2c4g.11186623.6.630.BoYYcY
-              // var refreshUrl = 'https://demo-vod.cn-shanghai.aliyuncs.com/voddemo/RefreshUploadVideo?BusinessType=vodai&TerminalType=pc&DeviceModel=iPhone9,2&UUID=59ECA-4193-4695-94DD-7E1247288&AppVersion=1.0.0&Title=haha1&FileName=xxx.mp4&VideoId=' + uploadInfo.videoId
-
               getAddress({business_id:uploadInfo.videoId},'put',uploadInfo);
-              // $.get(refreshUrl, function (data) {
-              //   var uploadAuth = data.UploadAuth
-              //   var uploadAddress = data.UploadAddress
-              //   var videoId = data.VideoId
-              //   uploader.setUploadAuthAndAddress(uploadInfo, uploadAuth, uploadAddress,videoId)
-              // }, 'json')
             }
           },
           // 文件上传成功
