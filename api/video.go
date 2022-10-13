@@ -6,6 +6,7 @@ import (
 	"file/enum"
 	"file/global"
 	"file/utils/alibab/vod"
+	"file/utils/alibab/vod/play"
 	"file/utils/alibab/vod/upload"
 	"file/validate"
 	"fmt"
@@ -177,7 +178,32 @@ func GetVideoDetail(ctx *gin.Context) {
 	})
 }
 
-// Play 视频点播相关
-func Play(ctx *gin.Context) {
+// GetPlayCertificate 获取播放凭证
+func GetPlayCertificate(ctx *gin.Context) {
+	idString := ctx.Query("id")
+	id, _ := strconv.Atoi(idString)
+	v, err := global.FileVideoServerClient.GetDetail(context.Background(), &proto.GetVideoRequest{Id: int64(id)})
+	if err != nil {
+		HandleGrpcErrorToHttp(ctx, err)
+		return
+	}
+	businessId := v.BusinessId
 
+	key := global.ServerConfig.OssConfig.Key
+	secret := global.ServerConfig.OssConfig.Secrect
+	client, err := vod.InitVodClient(key, secret)
+	if err != nil {
+		ErrorInternal(ctx, "init vod client error")
+		return
+	}
+	certificate, err := play.GetVideoPlayCertificate(client, businessId)
+	if err != nil {
+		Error(ctx, "get video play error")
+		return
+	}
+
+	SuccessNotMessage(ctx, gin.H{
+		"id":          id,
+		"certificate": certificate,
+	})
 }
