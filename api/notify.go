@@ -1,7 +1,10 @@
 package api
 
 import (
+	"context"
 	"encoding/json"
+	proto "file/api/qvbilam/file/v1"
+	"file/global"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"log"
@@ -16,6 +19,38 @@ type RequestParams struct {
 }
 
 func AliVideoCallback(ctx *gin.Context) {
+	//requestLog(ctx) // 记录请求日志
+
+	data, _ := ctx.GetRawData()
+	fmt.Println(data)
+	return
+	var body map[string]string
+	_ = json.Unmarshal(data, &body)
+
+	if body["EventType"] == "FileUploadComplete" {
+		businessId := body["VideoId"]
+		//size := body["Size"]
+		status := "blocked"
+		if body["Status"] == "success" {
+			status = "normal"
+		}
+
+		// 修改文件状态
+		global.FileVideoServerClient.Update(context.Background(), &proto.UpdateVideoRequest{
+			BusinessId: businessId,
+			Size:       0,
+			Duration:   0,
+			Status:     status,
+			Expand:     "",
+		})
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{
+		"message": "ok",
+	})
+}
+
+func requestLog(ctx *gin.Context) {
 	// 获取参数
 	r := RequestParams{}
 	body := make(map[string]interface{})
@@ -65,8 +100,4 @@ func AliVideoCallback(ctx *gin.Context) {
 
 	log.SetFlags(log.Ltime | log.Ldate)
 	log.Printf(string(req))
-
-	ctx.JSON(http.StatusOK, gin.H{
-		"message": "ok",
-	})
 }
