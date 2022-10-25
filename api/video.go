@@ -53,13 +53,20 @@ func CreateUploadVideo(ctx *gin.Context) {
 	desc := fileSha1
 
 	// 验证文件是否存在
-	exists, err := global.FileVideoServerClient.Exists(context.Background(), &proto.GetVideoRequest{FileSha1: fileSha1})
+	videoFile, err := global.FileVideoServerClient.Exists(context.Background(), &proto.GetVideoRequest{FileSha1: fileSha1})
 	if err != nil {
 		HandleGrpcErrorToHttp(ctx, err)
 		return
 	}
-	if exists.IsExists == true {
-		ErrorAlreadyExists(ctx, "video file already exists")
+	fmt.Printf("tmd: %+v\n", videoFile)
+	if videoFile.IsExists == true {
+		ErrorAlreadyExists(ctx, "video file already exists", &videoDetailResponse{
+			Id:         videoFile.Video.Id,
+			BusinessId: videoFile.Video.BusinessId,
+			Url:        videoFile.Video.Url,
+			Channel:    videoFile.Video.Channel,
+			Status:     videoFile.Video.Status,
+		})
 		return
 	}
 

@@ -61,9 +61,10 @@ func ErrorForbidden(ctx *gin.Context, message string) {
 	})
 }
 
-func ErrorAlreadyExists(ctx *gin.Context, message string) {
+func ErrorAlreadyExists(ctx *gin.Context, message string, errors interface{}) {
 	ctx.JSON(http.StatusFound, gin.H{
 		responseFieldMessage: message,
+		responseFiledErrors:  errors,
 	})
 }
 

@@ -176,7 +176,8 @@
           // 文件上传成功
           onUploadSucceed: function (uploadInfo) {
             console.log("onUploadSucceed: " + uploadInfo.file.name + ", endpoint:" + uploadInfo.endpoint + ", bucket:" + uploadInfo.bucket + ", object:" + uploadInfo.object)
-            $('#status').text('文件上传成功!')
+            // $('#status').text('文件上传成功!')
+            $('#status').text(`文件上传成功!ID:${res.id}, BID:${res.business_id}`)
           },
           // 文件上传失败
           onUploadFailed: function (uploadInfo, code, message) {
@@ -216,7 +217,9 @@
           },
           // 全部文件上传结束
           onUploadEnd: function (uploadInfo) {
-            $('#status').text('文件上传完毕!')
+            // $('#status').text('文件上传完毕!')
+            console.log(FileInfo)
+            $('#status').text(`文件上传完毕!ID:${FileInfo.id}`)
 
             console.log("onUploadEnd: uploaded all the files")
           }
