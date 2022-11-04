@@ -18,10 +18,10 @@ spec:
     spec:
       containers:
         - name: file-web-server
-          image: registry.cn-hangzhou.aliyuncs.com/qvbilam/file-web:2.0
+          image: registry.cn-hangzhou.aliyuncs.com/qvbilam/file-web:1.0.0
           imagePullPolicy: IfNotPresent
           ports:
-            - containerPort: 9501
+            - containerPort: 9701
           env:
             - name: SERVER_NAME
               valueFrom:
