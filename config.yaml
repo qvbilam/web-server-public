@@ -1,5 +1,5 @@
 name: "file-web-server"
-port: 9501
+port: 9703
 tags: ["file", "web"]
 oss:
   key: "LTAI5tGH3YwADGhBCyB3Cg3s"
