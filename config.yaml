@@ -1,6 +1,6 @@
-name: "file-web-server"
+name: "public-web-server"
 port: 9703
-tags: ["file", "web"]
+tags: ["public", "web"]
 oss:
   key: "LTAI5tGH3YwADGhBCyB3Cg3s"
   secrect: "db9ieC5otI7oye6XlqGr2xPRQfe7sC"
