@@ -3,15 +3,23 @@ package api
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"net/http"
 	"net/url"
 	"public/global"
 	"public/utils/alibab/oss"
+	"public/validate"
 	"strings"
 )
 
 // Token 获取token
 func Token(ctx *gin.Context) {
+
+	request := validate.CreateOss{}
+	if err := ctx.Bind(request); err != nil {
+		HandleValidateError(ctx, err)
+		return
+	}
+	// todo 判断文件是否存在
+
 	o := oss.Oss{
 		ExpireTime:  global.ServerConfig.OssConfig.ExpireTime,
 		UploadDir:   global.ServerConfig.OssConfig.UploadDir,
@@ -32,52 +40,53 @@ func Token(ctx *gin.Context) {
 
 func Callback(ctx *gin.Context) {
 	o := oss.Oss{}
-	fmt.Println("\nHandle Post Request ... ")
 	// Get PublicKey bytes
 	bytePublicKey, err := o.GetPublicKey(ctx)
 	if err != nil {
-		o.ResponseFailed(ctx)
+		Error(ctx, err.Error())
 		return
 	}
 
 	// Get Authorization bytes : decode from Base64String
 	byteAuthorization, err := o.GetAuthorization(ctx)
 	if err != nil {
-		o.ResponseFailed(ctx)
+		Error(ctx, err.Error())
 		return
 	}
 
 	// Get MD5 bytes from Newly Constructed Authorization String.
 	byteMD5, bodyStr, err := o.GetMD5FromNewAuthString(ctx)
 	if err != nil {
-		o.ResponseFailed(ctx)
+		Error(ctx, err.Error())
 		return
 	}
 
 	decodeUrl, err := url.QueryUnescape(bodyStr)
 	if err != nil {
-		fmt.Println(err)
+		Error(ctx, err.Error())
+		return
 	}
-	fmt.Println(decodeUrl)
+	//fmt.Println(decodeUrl)
 	params := make(map[string]string)
-	datas := strings.Split(decodeUrl, "&")
-	for _, v := range datas {
-		sdatas := strings.Split(v, "=")
+	ds := strings.Split(decodeUrl, "&")
+	for _, v := range ds {
+		sds := strings.Split(v, "=")
 		fmt.Println(v)
-		params[sdatas[0]] = sdatas[1]
+		params[sds[0]] = sds[1]
 	}
 	fileName := params["filename"]
 	fileUrl := fmt.Sprintf("%s/%s", global.ServerConfig.OssConfig.Host, fileName)
 
 	// verifySignature and response to client
-	if o.VerifySignature(bytePublicKey, byteMD5, byteAuthorization) {
+	if !o.VerifySignature(bytePublicKey, byteMD5, byteAuthorization) {
 		// do something you want accoding to callback_body ...
-		ctx.JSON(http.StatusOK, gin.H{
-			"url": fileUrl,
-		})
-		//0.ResponseSuccess(ctx)  // response OK : 200
-	} else {
-		o.ResponseFailed(ctx) // response FAILED : 400
+
+		Error(ctx, "verifySignature fail")
+		return
 	}
+
+	SuccessNotMessage(ctx, gin.H{
+		"url": fileUrl,
+	})
 
 }

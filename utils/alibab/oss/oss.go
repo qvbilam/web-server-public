@@ -152,7 +152,7 @@ func (o *Oss) GetMD5FromNewAuthString(ctx *gin.Context) ([]byte, string, error) 
 	}
 
 	strCallbackBody := string(body)
-	fmt.Println("---body/--- \r\n " + string(body))
+	//fmt.Println("---body/--- \r\n " + string(body))
 
 	// fmt.Printf("r.URL.RawPath={%s}, r.URL.Query()={%s}, strCallbackBody={%s}\n", r.URL.RawPath, r.URL.Query(), strCallbackBody)
 	strURLPathDecode, errUnescape := unescapePath(ctx.Request.URL.Path, encodePathSegment) //url.PathUnescape(r.URL.Path) for Golang v1.8.2+

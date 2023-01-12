@@ -27,7 +27,7 @@ function send_request()
     if (xmlhttp!=null)
     {
         // serverUrl是 用户获取 '签名和Policy' 等信息的应用服务器的URL，请将下面的IP和Port配置为您自己的真实信息。
-        serverUrl = 'http://127.0.0.1:9703'
+        serverUrl = 'http://127.0.0.1:9501'
 		
         xmlhttp.open( "GET", serverUrl + "/v1/token", false );
         xmlhttp.send( null );
@@ -59,9 +59,9 @@ function get_signature()
     if (expire < now + 3)
     {
         body = send_request()
+        console.log(body)
+        const obj = JSON.parse(JSON.parse(body).data)
 
-        var obj = eval ("(" + body + ")");
-        console.log(JSON.parse(body))
         host = obj['host']
         policyBase64 = obj['policy']
         accessid = obj['accessId']
