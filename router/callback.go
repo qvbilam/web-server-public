@@ -1,8 +1,8 @@
 package router
 
 import (
-	"file/api"
 	"github.com/gin-gonic/gin"
+	"public/api"
 )
 
 func InitCallbackRouter(Router *gin.RouterGroup) {

@@ -1,11 +1,11 @@
 package initialize
 
 import (
-	"file/global"
 	"github.com/fsnotify/fsnotify"
 	"github.com/namsral/flag"
 	"github.com/spf13/viper"
 	"go.uber.org/zap"
+	"public/global"
 	"strconv"
 )
 

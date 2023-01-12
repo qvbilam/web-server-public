@@ -22,12 +22,12 @@ import (
 )
 
 type Oss struct {
-	ExpireTime  int64 // 有效时间
-	UploadDir   string
-	Host        string
-	Key         string
-	Secrect     string
-	CallBackUrl string // 回调地址
+	ExpireTime  int64  `json:"expire_time"` // 有效时间
+	UploadDir   string `json:"upload_dir"`
+	Host        string `json:"host"`
+	Key         string `json:"key"`
+	Secrect     string `json:"secrect"`
+	CallBackUrl string `json:"call_back_url"` // 回调地址
 }
 
 type ConfigStruct struct {
@@ -56,7 +56,7 @@ func getGmtIso8601(expireEnd int64) string {
 	return tokenExpire
 }
 
-func (o *Oss) GetPolicyToken() string {
+func (o *Oss) GetPolicyToken() (string, error) {
 	now := time.Now().Unix()
 	expireEnd := now + o.ExpireTime
 	var tokenExpire = getGmtIso8601(expireEnd)
@@ -82,7 +82,7 @@ func (o *Oss) GetPolicyToken() string {
 	callbackParam.CallbackBodyType = "application/x-www-form-urlencoded"
 	callbackStr, err := json.Marshal(callbackParam)
 	if err != nil {
-		fmt.Println("callback json err:", err)
+		return "", err
 	}
 	callbackBase64 := base64.StdEncoding.EncodeToString(callbackStr)
 
@@ -96,9 +96,9 @@ func (o *Oss) GetPolicyToken() string {
 	policyToken.Callback = callbackBase64
 	response, err := json.Marshal(policyToken)
 	if err != nil {
-		fmt.Println("json err:", err)
+		return "", err
 	}
-	return string(response)
+	return string(response), nil
 }
 
 func (o *Oss) GetPublicKey(ctx *gin.Context) ([]byte, error) {

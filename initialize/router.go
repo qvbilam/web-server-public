@@ -1,11 +1,11 @@
 package initialize
 
 import (
-	"file/global"
-	"file/middleware"
-	customizeRouter "file/router"
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"public/global"
+	"public/middleware"
+	customizeRouter "public/router"
 )
 
 func InitRouters() *gin.Engine {

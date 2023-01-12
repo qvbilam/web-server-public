@@ -1,12 +1,12 @@
 package api
 
 import (
-	"file/global"
-	"file/utils/alibab/oss"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"net/url"
+	"public/global"
+	"public/utils/alibab/oss"
 	"strings"
 )
 
@@ -20,13 +20,14 @@ func Token(ctx *gin.Context) {
 		Secrect:     global.ServerConfig.OssConfig.Secrect,
 		CallBackUrl: global.ServerConfig.OssConfig.CallbackUrl,
 	}
-	fmt.Println(123)
-	fmt.Printf("%+v", o)
 
-	response := o.GetPolicyToken()
-	ctx.Header("Access-Control-Allow-Methods", "POST")
-	ctx.Header("Access-Control-Allow-Origin", "*")
-	ctx.String(200, response)
+	response, err := o.GetPolicyToken()
+	if err != nil {
+		Error(ctx, err.Error())
+		return
+	}
+
+	SuccessNotMessage(ctx, response)
 }
 
 func Callback(ctx *gin.Context) {
@@ -78,4 +79,5 @@ func Callback(ctx *gin.Context) {
 	} else {
 		o.ResponseFailed(ctx) // response FAILED : 400
 	}
+
 }

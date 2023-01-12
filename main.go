@@ -1,12 +1,12 @@
 package main
 
 import (
-	"file/global"
-	"file/initialize"
 	"fmt"
 	"go.uber.org/zap"
 	"os"
 	"os/signal"
+	"public/global"
+	"public/initialize"
 	"syscall"
 )
 

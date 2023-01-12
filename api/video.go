@@ -2,15 +2,15 @@ package api
 
 import (
 	"context"
-	proto "file/api/qvbilam/file/v1"
-	"file/enum"
-	"file/global"
-	"file/utils/alibab/vod"
-	"file/utils/alibab/vod/play"
-	"file/utils/alibab/vod/upload"
-	"file/validate"
 	"fmt"
 	"github.com/gin-gonic/gin"
+	proto "public/api/qvbilam/public/v1"
+	"public/enum"
+	"public/global"
+	"public/utils/alibab/vod"
+	"public/utils/alibab/vod/play"
+	"public/utils/alibab/vod/upload"
+	"public/validate"
 	"strconv"
 )
 

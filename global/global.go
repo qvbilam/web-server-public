@@ -1,10 +1,10 @@
 package global
 
 import (
-	proto "file/api/qvbilam/file/v1"
-	userProto "file/api/qvbilam/user/v1"
-	"file/config"
 	ut "github.com/go-playground/universal-translator"
+	proto "public/api/qvbilam/public/v1"
+	userProto "public/api/qvbilam/user/v1"
+	"public/config"
 )
 
 var (

@@ -1,8 +1,8 @@
 package router
 
 import (
-	"file/api"
 	"github.com/gin-gonic/gin"
+	"public/api"
 )
 
 func InitVideoRouter(Router *gin.RouterGroup) {

@@ -1,13 +1,14 @@
 package api
 
 import (
-	"file/global"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
+	"github.com/thinkeridea/go-extend/exnet"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"net/http"
+	"public/global"
 	"strings"
 )
 
@@ -15,12 +16,20 @@ const responseFieldData = "data"
 const responseFieldMessage = "msg"
 const responseFieldCode = "code"
 const responseFiledErrors = "errors"
+const responseFiledListTotal = "total"
 
 // Success 成功
 func Success(ctx *gin.Context, data interface{}, message string) {
 	ctx.JSON(http.StatusOK, gin.H{
 		responseFieldData:    data,
 		responseFieldMessage: message,
+	})
+}
+
+func SuccessList(ctx *gin.Context, data interface{}, total int64) {
+	ctx.JSON(http.StatusOK, gin.H{
+		responseFiledListTotal: total,
+		responseFieldData:      data,
 	})
 }
 
@@ -98,13 +107,15 @@ func HandleGrpcErrorToHttp(ctx *gin.Context, err error) {
 			case codes.NotFound:
 				ErrorNotfound(ctx, s.Message())
 			case codes.Internal:
-				ErrorInternal(ctx, fmt.Sprintf("服务错误: %d; 信息: %s", s.Code(), err.Error()))
+				ErrorInternal(ctx, s.Message())
 			case codes.InvalidArgument:
-				Error(ctx, fmt.Sprintf("参数错误: %d; 信息: %s", s.Code(), err.Error()))
+				Error(ctx, s.Message())
 			case codes.Unavailable:
-				Error(ctx, fmt.Sprintf("用户服务: %d; 信息: %s", s.Code(), err.Error()))
+				Error(ctx, s.Message())
+			case codes.AlreadyExists:
+				Error(ctx, s.Message())
 			default:
-				ErrorInternal(ctx, fmt.Sprintf("其他错误: %d; 信息: %s", s.Code(), err.Error()))
+				ErrorInternal(ctx, fmt.Sprintf("code: %d, message: %s", s.Code(), s.Message()))
 			}
 
 			return
@@ -142,4 +153,13 @@ func removeTopStruct(fields map[string]string) map[string]string {
 		res[key] = err
 	}
 	return res
+}
+
+func GetClientIP(ctx *gin.Context) string {
+	r := ctx.Request
+	ip := exnet.ClientPublicIP(r)
+	if ip == "" {
+		ip = exnet.ClientIP(r)
+	}
+	return ip
 }

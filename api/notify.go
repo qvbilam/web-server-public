@@ -3,13 +3,13 @@ package api
 import (
 	"context"
 	"encoding/json"
-	proto "file/api/qvbilam/file/v1"
-	"file/global"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"log"
 	"net/http"
 	"os"
+	proto "public/api/qvbilam/public/v1"
+	"public/global"
 	"time"
 )
 
@@ -36,13 +36,17 @@ func AliVideoCallback(ctx *gin.Context) {
 		}
 
 		// 修改文件状态
-		global.FileVideoServerClient.Update(context.Background(), &proto.UpdateVideoRequest{
+		_, err := global.FileVideoServerClient.Update(context.Background(), &proto.UpdateVideoRequest{
 			BusinessId: businessId,
 			Size:       0,
 			Duration:   0,
 			Status:     status,
 			Expand:     "",
 		})
+		if err != nil {
+			HandleGrpcErrorToHttp(ctx, err)
+			return
+		}
 	}
 
 	ctx.JSON(http.StatusOK, gin.H{
