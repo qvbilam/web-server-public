@@ -29,7 +29,7 @@ type videoDetailResponse struct {
 	Status      string `json:"status"`
 	Duration    int64  `json:"duration"`
 	Size        int64  `json:"size"`
-	Expand      string `json:"expand"`
+	Extra       string `json:"extra"`
 }
 
 // CreateUploadVideo 创建上传视频凭证
@@ -181,7 +181,7 @@ func GetVideoDetail(ctx *gin.Context) {
 		Channel:     v.Channel,
 		ContentType: v.ContentType,
 		Status:      v.Status,
-		Expand:      v.Expand,
+		Extra:       v.Extra,
 	})
 }
 
