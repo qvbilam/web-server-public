@@ -29,7 +29,7 @@ function send_request()
         // serverUrl是 用户获取 '签名和Policy' 等信息的应用服务器的URL，请将下面的IP和Port配置为您自己的真实信息。
         serverUrl = 'http://127.0.0.1:9501'
 		
-        xmlhttp.open( "GET", serverUrl + "/v1/token", false );
+        xmlhttp.open( "GET", serverUrl + "/v1/token?file_sha1=534511019", false );
         xmlhttp.send( null );
         console.log(xmlhttp.responseText,'xmlhttp.responseText')
         return xmlhttp.responseText

@@ -41,7 +41,7 @@ func AliVideoCallback(ctx *gin.Context) {
 			Size:       0,
 			Duration:   0,
 			Status:     status,
-			Expand:     "",
+			Extra:      "",
 		})
 		if err != nil {
 			HandleGrpcErrorToHttp(ctx, err)

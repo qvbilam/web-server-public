@@ -78,6 +78,7 @@ func (o *Oss) GetPolicyToken() (string, error) {
 
 	var callbackParam CallbackParam
 	callbackParam.CallbackUrl = o.CallBackUrl
+	//callbackParam.CallbackBody = "userId=${userId}&fileSha1=${fileSha1}&filename=${object}&size=${size}&mimeType=${mimeType}&height=${imageInfo.height}&width=${imageInfo.width}"
 	callbackParam.CallbackBody = "filename=${object}&size=${size}&mimeType=${mimeType}&height=${imageInfo.height}&width=${imageInfo.width}"
 	callbackParam.CallbackBodyType = "application/x-www-form-urlencoded"
 	callbackStr, err := json.Marshal(callbackParam)

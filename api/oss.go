@@ -1,9 +1,11 @@
 package api
 
 import (
+	"context"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/url"
+	proto "public/api/qvbilam/public/v1"
 	"public/global"
 	"public/utils/alibab/oss"
 	"public/validate"
@@ -14,11 +16,30 @@ import (
 func Token(ctx *gin.Context) {
 
 	request := validate.CreateOss{}
-	if err := ctx.Bind(request); err != nil {
+	if err := ctx.Bind(&request); err != nil {
 		HandleValidateError(ctx, err)
 		return
 	}
-	// todo 判断文件是否存在
+	// 判断文件是否存在
+	exists, err := global.FileServerClient.Exists(context.Background(), &proto.FileDetailRequest{
+		Sha1: request.FileSha1,
+	})
+	if err != nil {
+		HandleGrpcErrorToHttp(ctx, err)
+		return
+	}
+
+	if exists.IsExists {
+		ErrorAlreadyExists(ctx, "文件已存在", gin.H{
+			"id":           exists.File.Id,
+			"url":          exists.File.Url,
+			"file_sha1":    exists.File.Sha1,
+			"size":         exists.File.Size,
+			"content_type": exists.File.ContentType,
+			"channel":      exists.File.Channel,
+		})
+		return
+	}
 
 	o := oss.Oss{
 		ExpireTime:  global.ServerConfig.OssConfig.ExpireTime,
@@ -39,6 +60,8 @@ func Token(ctx *gin.Context) {
 }
 
 func Callback(ctx *gin.Context) {
+	requestLog(ctx) // 记录请求日志
+
 	o := oss.Oss{}
 	// Get PublicKey bytes
 	bytePublicKey, err := o.GetPublicKey(ctx)
@@ -67,7 +90,10 @@ func Callback(ctx *gin.Context) {
 		return
 	}
 	//fmt.Println(decodeUrl)
+	fmt.Println(1)
 	params := make(map[string]string)
+	fmt.Println(2)
+	fmt.Println(params)
 	ds := strings.Split(decodeUrl, "&")
 	for _, v := range ds {
 		sds := strings.Split(v, "=")
@@ -78,6 +104,7 @@ func Callback(ctx *gin.Context) {
 	fileUrl := fmt.Sprintf("%s/%s", global.ServerConfig.OssConfig.Host, fileName)
 
 	// verifySignature and response to client
+	fmt.Println(3)
 	if !o.VerifySignature(bytePublicKey, byteMD5, byteAuthorization) {
 		// do something you want accoding to callback_body ...
 

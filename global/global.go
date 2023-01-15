@@ -12,6 +12,6 @@ var (
 	Trans        ut.Translator // 表单验证
 
 	FileVideoServerClient proto.VideoClient
-	FileImageServerClient proto.ImageClient
+	FileServerClient      proto.FileClient
 	UserServerClient      userProto.UserClient
 )

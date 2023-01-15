@@ -59,10 +59,10 @@ func (s *serverClientConfig) initFileServer() {
 	}
 
 	videoClient := proto.NewVideoClient(conn)
-	imageClient := proto.NewImageClient(conn)
+	fileClient := proto.NewFileClient(conn)
 
 	global.FileVideoServerClient = videoClient
-	global.FileImageServerClient = imageClient
+	global.FileServerClient = fileClient
 }
 
 func (s *serverClientConfig) initUserServer() {
