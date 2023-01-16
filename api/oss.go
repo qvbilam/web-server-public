@@ -60,7 +60,7 @@ func Token(ctx *gin.Context) {
 }
 
 func Callback(ctx *gin.Context) {
-	requestLog(ctx) // 记录请求日志
+	//requestLog(ctx) // 记录请求日志
 
 	o := oss.Oss{}
 	// Get PublicKey bytes
@@ -90,10 +90,7 @@ func Callback(ctx *gin.Context) {
 		return
 	}
 	//fmt.Println(decodeUrl)
-	fmt.Println(1)
 	params := make(map[string]string)
-	fmt.Println(2)
-	fmt.Println(params)
 	ds := strings.Split(decodeUrl, "&")
 	for _, v := range ds {
 		sds := strings.Split(v, "=")
@@ -104,7 +101,6 @@ func Callback(ctx *gin.Context) {
 	fileUrl := fmt.Sprintf("%s/%s", global.ServerConfig.OssConfig.Host, fileName)
 
 	// verifySignature and response to client
-	fmt.Println(3)
 	if !o.VerifySignature(bytePublicKey, byteMD5, byteAuthorization) {
 		// do something you want accoding to callback_body ...
 
