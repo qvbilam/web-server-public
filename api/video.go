@@ -60,13 +60,7 @@ func CreateUploadVideo(ctx *gin.Context) {
 	}
 	fmt.Printf("tmd: %+v\n", videoFile)
 	if videoFile.IsExists == true {
-		ErrorAlreadyExists(ctx, "video file already exists", &videoDetailResponse{
-			Id:         videoFile.Video.Id,
-			BusinessId: videoFile.Video.BusinessId,
-			Url:        videoFile.Video.Url,
-			Channel:    videoFile.Video.Channel,
-			Status:     videoFile.Video.Status,
-		})
+		ErrorAlreadyExists(ctx, videoFile.Video.Id, "video file already exists")
 		return
 	}
 

@@ -30,14 +30,7 @@ func Token(ctx *gin.Context) {
 	}
 
 	if exists.IsExists {
-		ErrorAlreadyExists(ctx, "文件已存在", gin.H{
-			"id":           exists.File.Id,
-			"url":          exists.File.Url,
-			"file_sha1":    exists.File.Sha1,
-			"size":         exists.File.Size,
-			"content_type": exists.File.ContentType,
-			"channel":      exists.File.Channel,
-		})
+		ErrorAlreadyExists(ctx, exists.File.Url, "文件已存在")
 		return
 	}
 

@@ -1,6 +1,5 @@
 name: "public-web-server"
-#port: 9703
-port: 9501
+port: 9703
 tags: ["public", "web"]
 oss:
   key: "LTAI5tGH3YwADGhBCyB3Cg3s"
