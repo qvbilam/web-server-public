@@ -6,7 +6,7 @@ import (
 )
 
 func InitOssRouter(Router *gin.RouterGroup) {
-	OssRouter := Router.Group("")
+	OssRouter := Router.Group("/public/oss")
 	{
 		OssRouter.GET("/token", api.Token)
 		OssRouter.POST("/callback", api.Callback)

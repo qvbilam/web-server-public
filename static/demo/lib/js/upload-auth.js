@@ -1,5 +1,5 @@
-const fileServer = "http://127.0.0.1:9501";
-const CertificateRouter = "/v1/video/upload/certificate";
+const fileServer = "http://127.0.0.1:9703";
+const CertificateRouter = "/public/video/upload/certificate";
 const FileStatusSuccess = "success"
 let FileInfo = {}
 

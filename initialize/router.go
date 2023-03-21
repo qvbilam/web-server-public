@@ -26,12 +26,13 @@ func InitRouters() *gin.Engine {
 		})
 	})
 
-	apiRouter := router.Group("/v1")
+	apiRouter := router.Group("")
 
 	// 初始化基础组建路由
 	customizeRouter.InitDemoRouter(router)
 	customizeRouter.InitOssRouter(apiRouter)
 	customizeRouter.InitVideoRouter(apiRouter)
 	customizeRouter.InitCallbackRouter(apiRouter)
+	customizeRouter.InitSmsRouter(apiRouter)
 	return router
 }

@@ -6,7 +6,7 @@ import (
 )
 
 func InitCallbackRouter(Router *gin.RouterGroup) {
-	CallbackRouter := Router.Group("/callback")
+	CallbackRouter := Router.Group("/public/callback")
 	{
 		CallbackRouter.POST("/vod", api.AliVideoCallback)
 	}

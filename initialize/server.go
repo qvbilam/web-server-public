@@ -60,9 +60,11 @@ func (s *serverClientConfig) initFileServer() {
 
 	videoClient := proto.NewVideoClient(conn)
 	fileClient := proto.NewFileClient(conn)
+	smsClient := proto.NewSmsClient(conn)
 
 	global.FileVideoServerClient = videoClient
 	global.FileServerClient = fileClient
+	global.SmsServerClient = smsClient
 }
 
 func (s *serverClientConfig) initUserServer() {

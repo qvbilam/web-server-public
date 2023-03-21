@@ -6,7 +6,7 @@ import (
 )
 
 func InitVideoRouter(Router *gin.RouterGroup) {
-	VideoRouter := Router.Group("video")
+	VideoRouter := Router.Group("/public/video")
 	{
 		VideoRouter.GET("/:id", api.GetVideoDetail)                      // 获取视频详情
 		VideoRouter.GET("/:id/play/certificate", api.GetPlayCertificate) // 获取播放凭证

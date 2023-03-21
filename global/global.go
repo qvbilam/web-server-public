@@ -13,5 +13,6 @@ var (
 
 	FileVideoServerClient proto.VideoClient
 	FileServerClient      proto.FileClient
+	SmsServerClient       proto.SmsClient
 	UserServerClient      userProto.UserClient
 )
