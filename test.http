@@ -1,5 +1,5 @@
 ### 上传视频
-POST http://127.0.0.1:9501/v1/video/upload/certificate
+POST {{localHost}}/v1/video/upload/certificate
 Content-Type: application/json
 
 {
@@ -9,7 +9,7 @@ Content-Type: application/json
 }
 
 ### 上传视频回调
-POST http://127.0.0.1:9501/v1/callback/vod?test=1&demo=callback
+POST {{localHost}}/v1/callback/vod?test=1&demo=callback
 Authorization: 123
 Content-Type: application/json
 
@@ -19,4 +19,4 @@ Content-Type: application/json
 }
 
 ### 获取视频播放凭证
-GET http://127.0.0.1:9501/v1/video/1/play/certificate
+GET {{localHost}}/v1/video/1/play/certificate
