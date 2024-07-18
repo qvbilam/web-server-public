@@ -29,8 +29,8 @@ func InitServer() {
 			port: global.ServerConfig.UserServerConfig.Port,
 		},
 		fileDialConfig: &dialConfig{
-			host: global.ServerConfig.FileServerConfig.Host,
-			port: global.ServerConfig.FileServerConfig.Port,
+			host: global.ServerConfig.PublicServerConfig.Host,
+			port: global.ServerConfig.PublicServerConfig.Port,
 		},
 	}
 
@@ -55,7 +55,7 @@ func (s *serverClientConfig) initFileServer() {
 		grpc.WithInsecure(),
 		grpc.WithUnaryInterceptor(retry.UnaryClientInterceptor(opts...)))
 	if err != nil {
-		zap.S().Fatalf("%s dial error: %s", global.ServerConfig.FileServerConfig.Name, err)
+		zap.S().Fatalf("%s dial error: %s", global.ServerConfig.PublicServerConfig.Name, err)
 	}
 
 	videoClient := proto.NewVideoClient(conn)

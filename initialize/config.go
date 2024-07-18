@@ -2,51 +2,53 @@ package initialize
 
 import (
 	"github.com/fsnotify/fsnotify"
-	"github.com/namsral/flag"
 	"github.com/spf13/viper"
 	"go.uber.org/zap"
+	"os"
 	"public/global"
 	"strconv"
 )
 
 func InitConfig() {
+	InitEnvConfig()
 	initViperConfig()
-	//InitEnvConfig()
 }
 
 func InitEnvConfig() {
-	home := flag.String("home", "cmd", "home")
-	serverPort := flag.String("port", "9501", "server port")
-	serverName := flag.String("server_name", "default-oss-web-server", "server name")
-	ossKey := flag.String("oss_key", "", "oss key")
-	ossSecrect := flag.String("oss_secrect", "", "oss secrect")
-	ossHost := flag.String("oss_host", "", "oss host")
-	ossCallbackUrl := flag.String("oss_callback_url", "", "oss callback")
-	ossUploadDir := flag.String("oss_upload_dir", "", "oss upload dir")
-	ossExpireTimeString := flag.String("oss_expire_time", "300", "oss expire time")
-
-	// 必须加, 否则将获取的配置值解析为定义的变量中
-	flag.Parse()
-
-	// 类型转换
-	port, _ := strconv.Atoi(*serverPort)
-	ossExpireTime, _ := strconv.Atoi(*ossExpireTimeString)
-
-	// 写入全局变量
-	global.ServerConfig.Home = *home
-	global.ServerConfig.Name = *serverName
-	global.ServerConfig.Port = int64(port)
-	global.ServerConfig.OssConfig.Key = *ossKey
-	global.ServerConfig.OssConfig.Secrect = *ossSecrect
-	global.ServerConfig.OssConfig.Host = *ossHost
-	global.ServerConfig.OssConfig.CallbackUrl = *ossCallbackUrl
-	global.ServerConfig.OssConfig.UploadDir = *ossUploadDir
-	global.ServerConfig.OssConfig.ExpireTime = int64(ossExpireTime)
+	serverPort, _ := strconv.Atoi(os.Getenv("PORT"))
+	ossExpiredTime, _ := strconv.Atoi(os.Getenv("OSS_EXPIRE_TIME"))
+	userServerPort, _ := strconv.Atoi(os.Getenv("USER_SERVER_PORT"))
+	publicServerPort, _ := strconv.Atoi(os.Getenv("PUBLIC_SERVER_PORT"))
+	// 服务
+	global.ServerConfig.Name = os.Getenv("SERVER_NAME")
+	global.ServerConfig.Home = "0.0.0.0"
+	global.ServerConfig.Port = int64(serverPort)
+	// oss
+	global.ServerConfig.OssConfig.Key = os.Getenv("OSS_KEY")
+	global.ServerConfig.OssConfig.Secret = os.Getenv("OSS_SECRET")
+	global.ServerConfig.OssConfig.Host = os.Getenv("OSS_HOST")
+	global.ServerConfig.OssConfig.CallbackUrl = os.Getenv("OSS_CALLBACK_URL")
+	global.ServerConfig.OssConfig.UploadDir = os.Getenv("OSS_UPLOAD_DIR")
+	global.ServerConfig.OssConfig.ExpireTime = int64(ossExpiredTime)
+	// user-server
+	global.ServerConfig.UserServerConfig.Host = os.Getenv("USER_SERVER_HOST")
+	global.ServerConfig.UserServerConfig.Name = os.Getenv("USER_SERVER_NAME")
+	global.ServerConfig.UserServerConfig.Port = int64(userServerPort)
+	// public-server
+	global.ServerConfig.PublicServerConfig.Host = os.Getenv("PUBLIC_SERVER_HOST")
+	global.ServerConfig.PublicServerConfig.Name = os.Getenv("PUBLIC_SERVER_NAME")
+	global.ServerConfig.PublicServerConfig.Port = int64(publicServerPort)
 }
 
 func initViperConfig() {
+	file := "config.yaml"
+	_, err := os.Stat(file)
+	if os.IsNotExist(err) {
+		return
+	}
+
 	v := viper.New()
-	v.SetConfigFile("config.yaml")
+	v.SetConfigFile(file)
 	// 读取配置文件
 	if err := v.ReadInConfig(); err != nil {
 		zap.S().Panicf("获取配置异常: %s", err)

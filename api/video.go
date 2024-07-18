@@ -36,7 +36,7 @@ type videoDetailResponse struct {
 func CreateUploadVideo(ctx *gin.Context) {
 	userId := 1 // todo 验证用户id
 	key := global.ServerConfig.OssConfig.Key
-	secret := global.ServerConfig.OssConfig.Secrect
+	secret := global.ServerConfig.OssConfig.Secret
 
 	request := validate.CreateCertificateVideoValidate{}
 	if err := ctx.ShouldBindJSON(&request); err != nil {
@@ -119,7 +119,7 @@ func RefreshUploadVideo(ctx *gin.Context) {
 
 	// 生成上传凭证
 	key := global.ServerConfig.OssConfig.Key
-	secret := global.ServerConfig.OssConfig.Secrect
+	secret := global.ServerConfig.OssConfig.Secret
 	client, err := vod.InitVodClient(key, secret)
 	if err != nil {
 		ErrorInternal(ctx, "init vod client error")
@@ -191,7 +191,7 @@ func GetPlayCertificate(ctx *gin.Context) {
 	businessId := v.BusinessId
 
 	key := global.ServerConfig.OssConfig.Key
-	secret := global.ServerConfig.OssConfig.Secrect
+	secret := global.ServerConfig.OssConfig.Secret
 	client, err := vod.InitVodClient(key, secret)
 	if err != nil {
 		ErrorInternal(ctx, "init vod client error")

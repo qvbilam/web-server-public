@@ -1,6 +1,6 @@
 module public
 
-go 1.18
+go 1.20
 
 require (
 	github.com/aliyun/alibaba-cloud-sdk-go v1.62.700

@@ -39,7 +39,7 @@ func Token(ctx *gin.Context) {
 		UploadDir:   global.ServerConfig.OssConfig.UploadDir,
 		Host:        global.ServerConfig.OssConfig.Host,
 		Key:         global.ServerConfig.OssConfig.Key,
-		Secrect:     global.ServerConfig.OssConfig.Secrect,
+		Secrect:     global.ServerConfig.OssConfig.Secret,
 		CallBackUrl: global.ServerConfig.OssConfig.CallbackUrl,
 	}
 

@@ -1,9 +1,9 @@
 #!/bin/bash
 # shellcheck disable=SC2086
-
-tag=$1
-imageName=qvbilam/file-web-server-alpine
-originImageName=registry.cn-hangzhou.aliyuncs.com/qvbilam/file-web
+echo -e "\033[0;32mPlease input server version\033[0m"
+read tag
+imageName=qvbilam/public-web-server-alpine
+originImageName=registry.cn-hangzhou.aliyuncs.com/qvbilam/web-server-public
 
 # build image
 docker build -t ${imageName} .
