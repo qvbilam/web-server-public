@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
         - name: public-web
-          image: registry.cn-hangzhou.aliyuncs.com/qvbilam/web-server-public:1.0.0
+          image: registry.cn-hangzhou.aliyuncs.com/qvbilam/web-server-public:1.0
           imagePullPolicy: Always
           ports: # 容器内部使用端口
             - containerPort: 9501

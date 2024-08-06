@@ -3,7 +3,6 @@ package initialize
 import (
 	"github.com/gin-gonic/gin"
 	"net/http"
-	"public/global"
 	"public/middleware"
 	customizeRouter "public/router"
 )
@@ -11,18 +10,15 @@ import (
 func InitRouters() *gin.Engine {
 	router := gin.Default()
 	router.Use(middleware.Cors())
-	router.GET("/ping", func(ctx *gin.Context) {
+	router.GET("/public/ping", func(ctx *gin.Context) {
 		ctx.JSON(http.StatusOK, gin.H{
 			"msg": "pong",
 		})
 	})
 
-	router.GET("/", func(context *gin.Context) {
+	router.GET("/public/version", func(context *gin.Context) {
 		context.JSON(http.StatusOK, gin.H{
-			"home":    global.ServerConfig.Home,
-			"name":    global.ServerConfig.Name,
-			"tags":    global.ServerConfig.Tags,
-			"version": "2.0.0",
+			"msg": "v1.0.0",
 		})
 	})
 
